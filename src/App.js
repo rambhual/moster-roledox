@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import CardList from "./components/card-list/card-list.component";
-import Card from "./components/card/card.component";
+import SearchBox from "./components/search/search-box.component";
 import "./App.css";
 export default class App extends Component {
   constructor() {
@@ -10,25 +10,24 @@ export default class App extends Component {
       searchMonster: ""
     };
   }
+
+  handleChange = e => {
+    this.setState({ searchMonster: e.target.value });
+  };
   componentDidMount() {
     fetch("http://jsonplaceholder.typicode.com/users")
       .then(res => res.json())
       .then(user => this.setState({ monsters: user }));
   }
   render() {
+    const { monsters, searchMonster } = this.state;
+    const searchedMonsters = monsters.filter(m =>
+      m.name.toLowerCase().includes(searchMonster.toLowerCase())
+    );
     return (
       <React.Fragment>
-        <input
-          type="search"
-          onChange={e => this.setState({ searchMonster: e.target.value })}
-          className="input has-text-center w-50"
-          placeholder="Search monster"
-        />
-        <CardList>
-          {this.state.monsters.map(monster => (
-            <Card key={monster.name} monster={monster} />
-          ))}
-        </CardList>
+        <SearchBox handler={this.handleChange} placeholder="Search monster" />
+        <CardList monsters={searchedMonsters} />
       </React.Fragment>
     );
   }
