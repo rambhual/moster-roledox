@@ -3,7 +3,7 @@ import "./card.style.css";
 const Card = props => {
   return (
     <div className="card-container">
-      <figure class="image is-square">
+      <figure className="image is-square">
         <img
           src={`https://robohash.org/${
             props.monster.id
